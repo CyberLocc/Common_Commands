@@ -1,11 +1,5 @@
-<pre>
-_________                                        _________                                          .___      
-\_   ___ \  ____   _____   _____   ____   ____   \_   ___ \  ____   _____   _____ _____    ____   __| _/______
-/    \  \/ /  _ \ /     \ /     \ /  _ \ /    \  /    \  \/ /  _ \ /     \ /     \\__  \  /    \ / __ |/  ___/
-\     \___(  <_> |  Y Y  |  Y Y  (  <_> |   |  \ \     \___(  <_> |  Y Y  |  Y Y  \/ __ \|   |  / /_/ |\___ \ 
- \______  /\____/|__|_|  |__|_|  /\____/|___|  /  \______  /\____/|__|_|  |__|_|  (____  |___|  \____ /____  >
-        \/             \/      \/            \/          \/             \/      \/     \/     \/     \/    \/ 
-</pre>
+# Common Commands
+
 My Common commands list, basically Commands I use alot, so would like to have stored and organized for quick usage. 
 
 Tried to put them in order of usage, to help with methodology. 
