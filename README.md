@@ -8,6 +8,14 @@
 ---
 # Setup / Miscellaneous
 
+<details><summary>Intial Setup:</summary>
+
+#### Create Project Directories:
+```
+read -r "projectName?Project Name: " && mkdir -p ~/"$projectName"/{enum,loot,privesc,exploit}
+```
+</details>
+
 <details><summary>Export Variables:</summary>
 
 #### Target IP:
